@@ -1,0 +1,8 @@
+#MAC files
+.DS_Store
+
+#package cache
+__pycache__/
+
+#Compile python code
+*.pyc
