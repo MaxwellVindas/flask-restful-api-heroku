@@ -1,4 +1,5 @@
 from datetime import timedelta
+import os
 from flask import Flask
 from flask_restful import Api
 from flask_jwt import JWT
@@ -17,7 +18,7 @@ jwt = JWT(app, authenticate, identity) # Create the /auth endpoint used to autho
 app.config['JWT_EXPIRATION_DELTA'] = timedelta(seconds=1800)
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False # Disable the tracking extension, SQLAlchemy already has one
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///sqlite_data.db' # Set type and path of DB
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL_CUSTOM', 'sqlite:///sqlite_data.db') # Set type and path of DB
 
 #Adding the endpoints to the Api object
 api.add_resource(Item, '/item/<string:name>')
