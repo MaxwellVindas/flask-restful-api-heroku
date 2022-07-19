@@ -6,9 +6,9 @@ from security import authenticate, identity
 from resources.user import UserRegister
 from resources.item import Item, ItemsList
 from resources.store import Store, StoreList
-from db import db
 
 app = Flask(__name__)
+app.config['DEBUG'] = True
 api = Api(app) # In charge to registry the endpoints
 
 app.secret_key = 'SUPER-SECRET'
@@ -28,4 +28,13 @@ api.add_resource(StoreList, '/stores')
 
 
 if __name__ == '__main__':
+    from db import db
+    db.init_app(app) # Initialize SQLAlchemy to ensure that we can use it
+
+    if app.config['DEBUG']:
+        @app.before_first_request # Call this function automatically before the first request
+        def create_tables():
+            db.create_all() # SQLAlchemy create the DB for us automatically
+            
+    
     app.run(port=5000)
